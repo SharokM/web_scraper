@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 
+
+# SCRAPER WIKI HONEY BADGER SITE 
+
 honey_badger = requests.get("https://en.wikipedia.org/wiki/Honey_badger")
 honey_badger.raise_for_status()
 honey_badger_html = honey_badger.text.encode("utf-8")
@@ -10,10 +13,29 @@ h2 = honey_badger_soup.find_all("h2")
 print("Number of h2 tags:", len(h2))
 for index in h2:
     print(index)
-    print(index.text.strip())
 
 links = honey_badger_soup.find_all("a")
 print("First 6 links:", links[:6])
 
 images = honey_badger_soup.find_all("img")
-print("Last 6 images:", images[4:9])
+print("Last 6 images:", images[-4:])
+
+
+# SCRAPER SKILLCRUSH SITE 
+url = "https://skillcrush.com/blueprint/python-web-apps-data-course/"
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+}
+
+response = requests.get(url, headers=headers)
+response.raise_for_status()
+
+soup = BeautifulSoup(response.text, "html.parser")
+
+for link in soup.find_all("a"):
+    href = link.get("href")
+    if href:
+        print(href)
+    else:
+        print("No href attribute found for this link.")
